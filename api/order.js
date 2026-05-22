@@ -1,11 +1,10 @@
 // api/order.js
 const { MongoClient } = require('mongodb');
-require('dotenv').config();
 
+// Vercel automatically loads MONGODB_URI, so we don't need dotenv here!
 const client = new MongoClient(process.env.MONGODB_URI);
 
 module.exports = async (req, res) => {
-  // Allow requests from your website
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -20,8 +19,8 @@ module.exports = async (req, res) => {
 
   try {
     await client.connect();
-    const db = client.db('paresalamat_db'); // This is your database name
-    const orders = db.collection('orders'); // This is your collection name
+    const db = client.db('paresalamat_db');
+    const orders = db.collection('orders');
 
     const newOrder = req.body;
     newOrder.createdAt = new Date();
