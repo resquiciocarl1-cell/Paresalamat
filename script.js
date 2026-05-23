@@ -356,21 +356,54 @@ function initNavScroll() { window.addEventListener("scroll", () => document.getE
 function toggleMenu() { document.getElementById("navLinks").classList.toggle("open"); }
 function closeMenu() { document.getElementById("navLinks").classList.remove("open"); }
 
-function sendMessage() {
-  const name = document.getElementById("msgName").value;
-  const email = document.getElementById("msgEmail").value;
-  const body = document.getElementById("msgBody").value;
+async function sendMessage() {
+  const name = document.getElementById("msgName").value.trim();
+  const email = document.getElementById("msgEmail").value.trim();
+  const body = document.getElementById("msgBody").value.trim();
   
   if(!name || !email || !body) {
     alert("Please fill out all fields before sending.");
     return;
   }
   
-  document.getElementById("msgSuccess").style.display = "block";
-  setTimeout(() => {
-    document.getElementById("msgSuccess").style.display = "none";
+  // Change the button text so the user knows it's sending
+  const btn = document.querySelector(".message-form .btn-primary");
+  const originalText = btn.textContent;
+  btn.textContent = "Sending...";
+  btn.disabled = true;
+
+  try {
+    // Send the data securely to FormSubmit, which forwards it to your email
+    await fetch("https://formsubmit.co/ajax/resquiciocarl1@gmail.com", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        message: body,
+        _subject: `New Paresalamat Message from ${name}` // Sets the email subject line
+      })
+    });
+
+    // Show success message and clear form
+    document.getElementById("msgSuccess").style.display = "block";
     document.getElementById("msgName").value = "";
     document.getElementById("msgEmail").value = "";
     document.getElementById("msgBody").value = "";
-  }, 3000);
+
+    setTimeout(() => {
+      document.getElementById("msgSuccess").style.display = "none";
+    }, 4000);
+
+  } catch (error) {
+    alert("Oops! Something went wrong. Please try again later.");
+    console.error(error);
+  } finally {
+    // Reset the button
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
 }
