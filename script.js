@@ -37,14 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavScroll();
   initStarRating();
 
-   document.addEventListener("DOMContentLoaded", () => {
-  renderMenu(currentFilter);
-  renderReviews();
-  initFilterBtns();
-  initScrollEffects();
-  initNavScroll();
-  initStarRating();
-
   // NEW: Phone Number Restriction
   const phoneInput = document.getElementById("custPhone");
   if (phoneInput) {
@@ -58,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-});
 });
 
 // ============================================
@@ -240,6 +231,7 @@ function openImageModal(src) {
   document.getElementById("imageModal").classList.add("open");
 }
 function closeImageModal() { document.getElementById("imageModal").classList.remove("open"); }
+
 // ============================================
 // OTHER FEATURES & REVIEWS LOGIC
 // ============================================
@@ -252,7 +244,7 @@ function renderReviews() {
 
   // Draw the reviews on the screen
   grid.innerHTML = reviews.map(rev => `
-    <div class="review-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    <div class="review-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); min-width: 300px; max-width: 300px; flex-shrink: 0; scroll-snap-align: start;">
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
         <div style="width: 40px; height: 40px; background: #8B0000; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">
           ${rev.avatar || rev.name.charAt(0).toUpperCase()}
@@ -268,6 +260,15 @@ function renderReviews() {
       <p style="color: #555; line-height: 1.5; font-style: italic;">"${rev.text}"</p>
     </div>
   `).join("");
+}
+
+// NEW: Function to make the arrows slide the carousel
+function scrollReviews(direction) {
+  const container = document.getElementById("reviewsGrid");
+  if (container) {
+    // 324 is the width of the card (300) plus the gap (24)
+    container.scrollBy({ left: direction * 324, behavior: 'smooth' });
+  }
 }
 
 function initStarRating() {
