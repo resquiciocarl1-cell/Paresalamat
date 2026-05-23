@@ -134,12 +134,13 @@ ul { list-style: none; }
   min-height: 100vh;
   background: var(--cream-light);
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(auto, 550px) minmax(auto, 400px);
+  justify-content: center;
   align-items: center;
   padding: 7rem 3rem 4rem;
   position: relative;
   overflow: hidden;
-  gap: 2rem;
+  gap: 4rem;
 }
 
 /* Blobs */
@@ -283,7 +284,7 @@ ul { list-style: none; }
   text-align: center;
   box-shadow: var(--shadow-warm);
   z-index: 1;
-  min-width: 220px;
+  min-width: 250px;
   animation: pulse 3s ease-in-out infinite;
 }
 @keyframes pulse {
