@@ -240,20 +240,128 @@ function openImageModal(src) {
   document.getElementById("imageModal").classList.add("open");
 }
 function closeImageModal() { document.getElementById("imageModal").classList.remove("open"); }
+// ============================================
+// OTHER FEATURES & REVIEWS LOGIC
+// ============================================
 
-// ============================================
-// OTHER FEATURES
-// ============================================
-function renderReviews() { /* ... kept original ... */ }
+let currentRating = 5; // Default to 5 stars
+
+function renderReviews() {
+  const grid = document.getElementById("reviewsGrid");
+  if (!grid) return; // Prevent crashes if the HTML is missing
+
+  // Draw the reviews on the screen
+  grid.innerHTML = reviews.map(rev => `
+    <div class="review-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+        <div style="width: 40px; height: 40px; background: #8B0000; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">
+          ${rev.avatar || rev.name.charAt(0).toUpperCase()}
+        </div>
+        <div>
+          <div style="font-weight: bold; color: #333;">${rev.name}</div>
+          <div style="font-size: 0.8em; color: #777;">${rev.date || "Just now"}</div>
+        </div>
+      </div>
+      <div style="color: #FACC15; font-size: 1.2rem; margin-bottom: 10px;">
+        ${'★'.repeat(rev.stars)}${'☆'.repeat(5 - rev.stars)}
+      </div>
+      <p style="color: #555; line-height: 1.5; font-style: italic;">"${rev.text}"</p>
+    </div>
+  `).join("");
+}
+
+function initStarRating() {
+  const stars = document.querySelectorAll("#starRating span");
+  if (stars.length === 0) return;
+
+  // Make stars look clickable and set default gold color
+  stars.forEach(s => {
+    s.style.cursor = "pointer";
+    s.style.fontSize = "1.8rem";
+    s.style.color = "#FACC15"; // Gold
+  });
+
+  // Listen for clicks on the stars
+  stars.forEach(star => {
+    star.addEventListener("click", function() {
+      currentRating = parseInt(this.getAttribute("data-val"));
+      
+      // Update colors based on which star was clicked
+      stars.forEach((s, index) => {
+        if (index < currentRating) {
+          s.style.color = "#FACC15"; // Gold
+        } else {
+          s.style.color = "#E5E7EB"; // Light Gray
+        }
+      });
+    });
+  });
+}
+
+function submitReview() {
+  const nameInput = document.getElementById("reviewerName").value.trim();
+  const textInput = document.getElementById("reviewText").value.trim();
+
+  if (!nameInput || !textInput) {
+    alert("Please enter both your name and a review.");
+    return;
+  }
+
+  // Create the new review object
+  const newReview = {
+    name: nameInput,
+    stars: currentRating,
+    date: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+    text: textInput,
+    avatar: nameInput.charAt(0).toUpperCase()
+  };
+
+  // Add the new review to the top of the array
+  reviews.unshift(newReview);
+  
+  // Redraw the screen to show it
+  renderReviews();
+
+  // Clear the input boxes for the next person
+  document.getElementById("reviewerName").value = "";
+  document.getElementById("reviewText").value = "";
+  currentRating = 5;
+  document.querySelectorAll("#starRating span").forEach(s => s.style.color = "#FACC15");
+  
+  // Show a success message
+  const successMsg = document.getElementById("reviewSuccess");
+  if(successMsg) {
+    successMsg.style.display = "block";
+    setTimeout(() => { successMsg.style.display = "none"; }, 3000);
+  }
+}
+
 function initScrollEffects() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
   }, { threshold: 0.1 });
   document.querySelectorAll(".fade-up").forEach(el => observer.observe(el));
 }
+
 function initNavScroll() { window.addEventListener("scroll", () => document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 60)); }
-function initStarRating() { /* ... kept original ... */ }
 function toggleMenu() { document.getElementById("navLinks").classList.toggle("open"); }
 function closeMenu() { document.getElementById("navLinks").classList.remove("open"); }
-function submitReview() { /* ... kept original ... */ }
-function sendMessage() { /* ... kept original ... */ }
+
+function sendMessage() {
+  const name = document.getElementById("msgName").value;
+  const email = document.getElementById("msgEmail").value;
+  const body = document.getElementById("msgBody").value;
+  
+  if(!name || !email || !body) {
+    alert("Please fill out all fields before sending.");
+    return;
+  }
+  
+  document.getElementById("msgSuccess").style.display = "block";
+  setTimeout(() => {
+    document.getElementById("msgSuccess").style.display = "none";
+    document.getElementById("msgName").value = "";
+    document.getElementById("msgEmail").value = "";
+    document.getElementById("msgBody").value = "";
+  }, 3000);
+}
