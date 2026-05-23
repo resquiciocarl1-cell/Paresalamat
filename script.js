@@ -36,6 +36,29 @@ document.addEventListener("DOMContentLoaded", () => {
   initScrollEffects();
   initNavScroll();
   initStarRating();
+
+   document.addEventListener("DOMContentLoaded", () => {
+  renderMenu(currentFilter);
+  renderReviews();
+  initFilterBtns();
+  initScrollEffects();
+  initNavScroll();
+  initStarRating();
+
+  // NEW: Phone Number Restriction
+  const phoneInput = document.getElementById("custPhone");
+  if (phoneInput) {
+    phoneInput.addEventListener("input", function () {
+      // 1. Instantly replace any non-digit character (letters, symbols) with nothing
+      this.value = this.value.replace(/\D/g, '');
+      
+      // 2. Prevent the user from typing more than 11 digits
+      if (this.value.length > 11) {
+        this.value = this.value.slice(0, 11);
+      }
+    });
+  }
+});
 });
 
 // ============================================
@@ -158,6 +181,14 @@ function openCheckout() {
 function closeCheckout() { document.getElementById("checkoutModal").classList.remove("open"); }
 
 async function placeOrder() {
+  const phoneVal = document.getElementById("custPhone").value;
+
+  // NEW: Check if the phone number is valid before proceeding
+  if (phoneVal.length < 10) {
+    alert("Please enter a valid 10 or 11-digit phone number.");
+    return; // This stops the function from running the database code
+  }
+
   const orderData = {
     name: document.getElementById("custName").value,
     phone: document.getElementById("custPhone").value,
