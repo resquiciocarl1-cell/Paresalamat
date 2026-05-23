@@ -16,6 +16,7 @@ const menuItems = [
 ];
 
 // ---- REVIEWS DATA ----
+// We keep a few fake ones just in case the database is totally empty!
 const initialReviews = [
   { name: "Maria Santos", stars: 5, date: "March 2024", text: "Grabe, the All-In Overload hit different! First time ko pero definitely babalik ako.", avatar: "M" },
   { name: "Jomar Reyes", stars: 5, date: "February 2024", text: "Fourth's Bowl is no joke — the wagyu cubes are so tender.", avatar: "J" },
@@ -31,20 +32,17 @@ let currentFilter = "all";
 // ---- INIT ----
 document.addEventListener("DOMContentLoaded", () => {
   renderMenu(currentFilter);
-  renderReviews();
+  fetchReviewsFromDB(); // NEW: Pull from database on load
   initFilterBtns();
   initScrollEffects();
   initNavScroll();
   initStarRating();
 
-  // NEW: Phone Number Restriction
+  // Phone Number Restriction
   const phoneInput = document.getElementById("custPhone");
   if (phoneInput) {
     phoneInput.addEventListener("input", function () {
-      // 1. Instantly replace any non-digit character (letters, symbols) with nothing
       this.value = this.value.replace(/\D/g, '');
-      
-      // 2. Prevent the user from typing more than 11 digits
       if (this.value.length > 11) {
         this.value = this.value.slice(0, 11);
       }
@@ -174,10 +172,9 @@ function closeCheckout() { document.getElementById("checkoutModal").classList.re
 async function placeOrder() {
   const phoneVal = document.getElementById("custPhone").value;
 
-  // NEW: Check if the phone number is valid before proceeding
   if (phoneVal.length < 10) {
     alert("Please enter a valid 10 or 11-digit phone number.");
-    return; // This stops the function from running the database code
+    return;
   }
 
   const orderData = {
@@ -189,7 +186,6 @@ async function placeOrder() {
     notes: document.getElementById("custNotes").value
   };
 
-  // 1. Database Backend Call
   try {
     await fetch('/api/order', {
       method: 'POST',
@@ -198,7 +194,6 @@ async function placeOrder() {
     });
   } catch (e) { console.error("Database error", e); }
 
-  // 2. WhatsApp Message
   const deliveryFee = deliveryType === "delivery" ? "₱60" : "₱0";
   const msg = encodeURIComponent(
     `🍜 *NEW ORDER – PARESALAMAT*\n\n` +
@@ -236,13 +231,28 @@ function closeImageModal() { document.getElementById("imageModal").classList.rem
 // OTHER FEATURES & REVIEWS LOGIC
 // ============================================
 
-let currentRating = 5; // Default to 5 stars
+let currentRating = 5;
+
+// NEW: Fetch reviews from MongoDB
+async function fetchReviewsFromDB() {
+  try {
+    const res = await fetch('/api/reviews');
+    if (res.ok) {
+      const dbReviews = await res.json();
+      if (dbReviews.length > 0) {
+        reviews = dbReviews; // Replace local array with Database array
+      }
+    }
+  } catch (e) {
+    console.error("Could not fetch reviews from DB", e);
+  }
+  renderReviews(); // Draw them on the screen after fetching
+}
 
 function renderReviews() {
   const grid = document.getElementById("reviewsGrid");
-  if (!grid) return; // Prevent crashes if the HTML is missing
+  if (!grid) return;
 
-  // Draw the reviews on the screen
   grid.innerHTML = reviews.map(rev => `
     <div class="review-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); min-width: 300px; max-width: 300px; flex-shrink: 0; scroll-snap-align: start;">
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -262,11 +272,9 @@ function renderReviews() {
   `).join("");
 }
 
-// NEW: Function to make the arrows slide the carousel
 function scrollReviews(direction) {
   const container = document.getElementById("reviewsGrid");
   if (container) {
-    // 324 is the width of the card (300) plus the gap (24)
     container.scrollBy({ left: direction * 324, behavior: 'smooth' });
   }
 }
@@ -275,31 +283,28 @@ function initStarRating() {
   const stars = document.querySelectorAll("#starRating span");
   if (stars.length === 0) return;
 
-  // Make stars look clickable and set default gold color
   stars.forEach(s => {
     s.style.cursor = "pointer";
     s.style.fontSize = "1.8rem";
-    s.style.color = "#FACC15"; // Gold
+    s.style.color = "#FACC15"; 
   });
 
-  // Listen for clicks on the stars
   stars.forEach(star => {
     star.addEventListener("click", function() {
       currentRating = parseInt(this.getAttribute("data-val"));
-      
-      // Update colors based on which star was clicked
       stars.forEach((s, index) => {
         if (index < currentRating) {
-          s.style.color = "#FACC15"; // Gold
+          s.style.color = "#FACC15"; 
         } else {
-          s.style.color = "#E5E7EB"; // Light Gray
+          s.style.color = "#E5E7EB"; 
         }
       });
     });
   });
 }
 
-function submitReview() {
+// NEW: Make this function async so it can talk to the database
+async function submitReview() {
   const nameInput = document.getElementById("reviewerName").value.trim();
   const textInput = document.getElementById("reviewText").value.trim();
 
@@ -308,7 +313,6 @@ function submitReview() {
     return;
   }
 
-  // Create the new review object
   const newReview = {
     name: nameInput,
     stars: currentRating,
@@ -317,19 +321,23 @@ function submitReview() {
     avatar: nameInput.charAt(0).toUpperCase()
   };
 
-  // Add the new review to the top of the array
+  // NEW: Save to MongoDB
+  try {
+    await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newReview)
+    });
+  } catch (e) { console.error("Error saving review", e); }
+
   reviews.unshift(newReview);
-  
-  // Redraw the screen to show it
   renderReviews();
 
-  // Clear the input boxes for the next person
   document.getElementById("reviewerName").value = "";
   document.getElementById("reviewText").value = "";
   currentRating = 5;
   document.querySelectorAll("#starRating span").forEach(s => s.style.color = "#FACC15");
   
-  // Show a success message
   const successMsg = document.getElementById("reviewSuccess");
   if(successMsg) {
     successMsg.style.display = "block";
