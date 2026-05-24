@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ============================================
 function renderMenu(filter = "all") {
   const grid = document.getElementById("menuGrid");
-  if (!grid) return; // Safegaurd
+  if (!grid) return; // Safeguard
 
   const filtered = filter === "all" ? menuItems : menuItems.filter(i => i.category === filter);
 
@@ -73,6 +73,11 @@ function renderMenu(filter = "all") {
       </div>
     </div>
   `).join("");
+
+  // FIX: Force the newly drawn cards to become visible
+  setTimeout(() => {
+    grid.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
+  }, 50);
 }
 
 function initFilterBtns() {
