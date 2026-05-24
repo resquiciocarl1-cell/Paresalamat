@@ -269,29 +269,42 @@ ul { list-style: none; }
   display: flex; align-items: center; justify-content: center;
   animation: fadeUp 0.7s 0.2s ease both;
 }
-.hero-bowl-ring {
-  width: 320px; height: 320px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--red) 0%, var(--orange) 60%, var(--gold) 100%);
-  animation: spin 20s linear infinite;
+
+/* NEW: Best Seller Badge */
+.best-seller-badge {
   position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--brown-dark);
+  font-family: var(--font-brand);
+  padding: 0.4rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(212, 160, 23, 0.4);
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
 .hero-bowl-card {
   background: var(--white);
   border-radius: var(--radius-xl);
-  padding: 2.5rem 2rem;
+  padding: 2.5rem 2.5rem;
   text-align: center;
   box-shadow: var(--shadow-warm);
   z-index: 1;
   min-width: 250px;
+  position: relative;
   animation: pulse 3s ease-in-out infinite;
 }
 @keyframes pulse {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
 }
-.bowl-emoji { font-size: 4rem; display: block; margin-bottom: 0.5rem; }
+
 .hero-bowl-card p { font-weight: 700; color: var(--text-mid); }
 .hero-bowl-card strong {
   display: block;
@@ -793,6 +806,35 @@ ul { list-style: none; }
   color: var(--white);
   padding: 1rem 0.75rem 0.5rem;
   font-weight: 700; font-size: 0.82rem;
+}
+
+/* NEW: FAQ Styling */
+.faq-section {
+  padding: 6rem 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.faq-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.faq-item {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-soft);
+}
+.faq-item h4 {
+  font-family: var(--font-brand);
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.faq-item p {
+  color: var(--text-mid);
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
 
 .feedback-section {
