@@ -12,7 +12,7 @@ const menuItems = [
   { id: 6, name: "Pares No. 5", price: 79, desc: "The secret cut. Ask the regulars – they know what No. 5 is all about.", img: "pares_no5.jpg", category: "classic", popular: false },
   { id: 7, name: "Basic Overload", price: 159, desc: "Laman, taba, balat, chicharon, balut – everything in one glorious bowl.", img: "Basic_Overload.jpg", category: "overload", popular: true },
   { id: 8, name: "All-In Overload", price: 219, desc: "Laman, taba, balat, chicharon, mata, no. 5, balut – the ultimate bowl.", img: "all_in_overload.jpg", category: "overload", popular: true },
-  { id: 9, name: "Fourth's Bowl", price: 229, desc: "Pares elevated – featuring premium Wagyu cubes.", img: "fourths_bowl.jpg", category: "special", popular: true }
+  { id: 9, name: "Fourth's Bowl", price: 229, desc: "Pares elevated – featuring premium Wagyu cubes.", img: "fourth's_bowl.jpg", category: "special", popular: true }
 ];
 
 // ---- REVIEWS DATA ----
