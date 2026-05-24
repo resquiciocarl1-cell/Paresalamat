@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ============================================
 function renderMenu(filter = "all") {
   const grid = document.getElementById("menuGrid");
-  if (!grid) return;
+  if (!grid) return; // Safeguard
 
   const filtered = filter === "all" ? menuItems : menuItems.filter(i => i.category === filter);
 
@@ -357,7 +357,10 @@ function initNavScroll() { window.addEventListener("scroll", () => document.getE
 function toggleMenu() { document.getElementById("navLinks").classList.toggle("open"); }
 function closeMenu() { document.getElementById("navLinks").classList.remove("open"); }
 
-async function sendMessage() {
+// ============================================
+// MESSAGE FORM LOGIC (CORS BYPASS FIX)
+// ============================================
+function sendMessage() {
   const name = document.getElementById("msgName").value.trim();
   const email = document.getElementById("msgEmail").value.trim();
   const body = document.getElementById("msgBody").value.trim();
@@ -372,34 +375,45 @@ async function sendMessage() {
   btn.textContent = "Sending...";
   btn.disabled = true;
 
-  try {
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("message", body);
-    formData.append("_subject", `New Paresalamat Message from ${name}`);
-    formData.append("_captcha", "false");
-    formData.append("_template", "table");
+  // Create an invisible form to bypass CORS restrictions
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "https://formsubmit.co/resquiciocarl1@gmail.com"; 
+  form.target = "_blank"; // Opens the FormSubmit confirmation in a new tab
 
-    await fetch("https://formsubmit.co/resquiciocarl1@gmail.com", {
-      method: "POST",
-      body: formData
-    });
+  // Helper to add hidden inputs
+  const addInput = (inputName, inputValue) => {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = inputName;
+    input.value = inputValue;
+    form.appendChild(input);
+  };
 
-    document.getElementById("msgSuccess").style.display = "block";
-    document.getElementById("msgName").value = "";
-    document.getElementById("msgEmail").value = "";
-    document.getElementById("msgBody").value = "";
+  // Add inputs
+  addInput("name", name);
+  addInput("email", email);
+  addInput("message", body);
+  addInput("_subject", `New Paresalamat Message from ${name}`);
+  addInput("_captcha", "false"); 
+  addInput("_template", "table");
 
-    setTimeout(() => {
-      document.getElementById("msgSuccess").style.display = "none";
-    }, 4000);
+  // Submit the form directly to FormSubmit
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
 
-  } catch (error) {
-    alert("Oops! Something went wrong. Please try again later.");
-    console.error(error);
-  } finally {
-    btn.textContent = originalText;
-    btn.disabled = false;
-  }
+  // Show success message and reset UI
+  document.getElementById("msgSuccess").style.display = "block";
+  document.getElementById("msgName").value = "";
+  document.getElementById("msgEmail").value = "";
+  document.getElementById("msgBody").value = "";
+
+  setTimeout(() => {
+    document.getElementById("msgSuccess").style.display = "none";
+  }, 4000);
+
+  // Reset button
+  btn.textContent = originalText;
+  btn.disabled = false;
 }
