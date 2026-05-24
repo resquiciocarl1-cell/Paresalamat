@@ -12,11 +12,10 @@ const menuItems = [
   { id: 6, name: "Pares No. 5", price: 79, desc: "The secret cut. Ask the regulars – they know what No. 5 is all about.", img: "pares_no5.jpg", category: "classic", popular: false },
   { id: 7, name: "Basic Overload", price: 159, desc: "Laman, taba, balat, chicharon, balut – everything in one glorious bowl.", img: "Basic_Overload.jpg", category: "overload", popular: true },
   { id: 8, name: "All-In Overload", price: 219, desc: "Laman, taba, balat, chicharon, mata, no. 5, balut – the ultimate bowl.", img: "all_in_overload.jpg", category: "overload", popular: true },
-  { id: 9, name: "Fourth's Bowl", price: 229, desc: "Pares elevated – featuring premium Wagyu cubes.", img: "fourth's_bowl.jpg", category: "special", popular: true }
+  { id: 9, name: "Fourth's Bowl", price: 229, desc: "Pares elevated – featuring premium Wagyu cubes.", img: "fourths_bowl.jpg", category: "special", popular: true }
 ];
 
 // ---- REVIEWS DATA ----
-// We keep a few fake ones just in case the database is totally empty!
 const initialReviews = [
   { name: "Maria Santos", stars: 5, date: "March 2024", text: "Grabe, the All-In Overload hit different! First time ko pero definitely babalik ako.", avatar: "M" },
   { name: "Jomar Reyes", stars: 5, date: "February 2024", text: "Fourth's Bowl is no joke — the wagyu cubes are so tender.", avatar: "J" },
@@ -32,13 +31,12 @@ let currentFilter = "all";
 // ---- INIT ----
 document.addEventListener("DOMContentLoaded", () => {
   renderMenu(currentFilter);
-  fetchReviewsFromDB(); // NEW: Pull from database on load
+  fetchReviewsFromDB();
   initFilterBtns();
   initScrollEffects();
   initNavScroll();
   initStarRating();
 
-  // Phone Number Restriction
   const phoneInput = document.getElementById("custPhone");
   if (phoneInput) {
     phoneInput.addEventListener("input", function () {
@@ -55,6 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // ============================================
 function renderMenu(filter = "all") {
   const grid = document.getElementById("menuGrid");
+  if (!grid) return; // Safegaurd
+
   const filtered = filter === "all" ? menuItems : menuItems.filter(i => i.category === filter);
 
   grid.innerHTML = filtered.map(item => `
@@ -233,20 +233,19 @@ function closeImageModal() { document.getElementById("imageModal").classList.rem
 
 let currentRating = 5;
 
-// NEW: Fetch reviews from MongoDB
 async function fetchReviewsFromDB() {
   try {
     const res = await fetch('/api/reviews');
     if (res.ok) {
       const dbReviews = await res.json();
       if (dbReviews.length > 0) {
-        reviews = dbReviews; // Replace local array with Database array
+        reviews = dbReviews; 
       }
     }
   } catch (e) {
     console.error("Could not fetch reviews from DB", e);
   }
-  renderReviews(); // Draw them on the screen after fetching
+  renderReviews();
 }
 
 function renderReviews() {
@@ -303,7 +302,6 @@ function initStarRating() {
   });
 }
 
-// NEW: Make this function async so it can talk to the database
 async function submitReview() {
   const nameInput = document.getElementById("reviewerName").value.trim();
   const textInput = document.getElementById("reviewText").value.trim();
@@ -321,7 +319,6 @@ async function submitReview() {
     avatar: nameInput.charAt(0).toUpperCase()
   };
 
-  // NEW: Save to MongoDB
   try {
     await fetch('/api/reviews', {
       method: 'POST',
@@ -366,14 +363,12 @@ async function sendMessage() {
     return;
   }
   
-  // Change the button text so the user knows it's sending
   const btn = document.querySelector(".message-form .btn-primary");
   const originalText = btn.textContent;
   btn.textContent = "Sending...";
   btn.disabled = true;
 
   try {
-    // Send the data securely to FormSubmit, which forwards it to your email
     await fetch("https://formsubmit.co/ajax/resquiciocarl1@gmail.com", {
       method: "POST",
       headers: {
@@ -384,11 +379,10 @@ async function sendMessage() {
         name: name,
         email: email,
         message: body,
-        _subject: `New Paresalamat Message from ${name}` // Sets the email subject line
+        _subject: `New Paresalamat Message from ${name}`
       })
     });
 
-    // Show success message and clear form
     document.getElementById("msgSuccess").style.display = "block";
     document.getElementById("msgName").value = "";
     document.getElementById("msgEmail").value = "";
@@ -402,7 +396,6 @@ async function sendMessage() {
     alert("Oops! Something went wrong. Please try again later.");
     console.error(error);
   } finally {
-    // Reset the button
     btn.textContent = originalText;
     btn.disabled = false;
   }
