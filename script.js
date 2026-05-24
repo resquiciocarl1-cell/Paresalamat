@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ============================================
 function renderMenu(filter = "all") {
   const grid = document.getElementById("menuGrid");
-  if (!grid) return; // Safeguard
+  if (!grid) return;
 
   const filtered = filter === "all" ? menuItems : menuItems.filter(i => i.category === filter);
 
@@ -74,7 +74,6 @@ function renderMenu(filter = "all") {
     </div>
   `).join("");
 
-  // FIX: Force the newly drawn cards to become visible
   setTimeout(() => {
     grid.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
   }, 50);
@@ -374,18 +373,17 @@ async function sendMessage() {
   btn.disabled = true;
 
   try {
-    await fetch("https://formsubmit.co/ajax/resquiciocarl1@gmail.com", {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("message", body);
+    formData.append("_subject", `New Paresalamat Message from ${name}`);
+    formData.append("_captcha", "false");
+    formData.append("_template", "table");
+
+    await fetch("https://formsubmit.co/resquiciocarl1@gmail.com", {
       method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        message: body,
-        _subject: `New Paresalamat Message from ${name}`
-      })
+      body: formData
     });
 
     document.getElementById("msgSuccess").style.display = "block";
