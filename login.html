@@ -47,16 +47,14 @@
   </div>
 
   <script>
-    // Simple Frontend Authentication (For School Project Demo)
+    // Simple Frontend Authentication
     function attemptLogin() {
       const user = document.getElementById("adminUser").value;
       const pass = document.getElementById("adminPass").value;
 
       // SET YOUR ADMIN CREDENTIALS HERE
       if (user === "admin" && pass === "paresalamat2024") {
-        // Create a temporary session token in the browser
         localStorage.setItem("paresAdminAuth", "true");
-        // Redirect to the secret admin dashboard
         window.location.href = "admin.html";
       } else {
         document.getElementById("loginError").style.display = "block";
