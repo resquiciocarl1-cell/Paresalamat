@@ -186,10 +186,24 @@
         poster="fourth's_bowl.jpg"
       ></video>
       <div class="reel-overlay">
-        <button class="reel-play-btn" id="reelPlayBtn" onclick="toggleReel()">
-          <span id="reelIcon">🔇</span>
-        </button>
         <div class="reel-badge">🍲 Paresalamat – Valenzuela's Finest</div>
+      </div>
+      <div class="reel-controls" id="reelControls">
+        <div class="reel-progress-wrap" id="reelProgressWrap">
+          <div class="reel-progress-bg">
+            <div class="reel-progress-fill" id="reelFill"></div>
+            <div class="reel-progress-thumb" id="reelThumb"></div>
+          </div>
+        </div>
+        <div class="reel-ctrl-row">
+          <button class="reel-ctrl-btn" id="reelPlayBtn" onclick="toggleReelPlay()" aria-label="Play/Pause">
+            <span id="reelPlayIcon">⏸</span>
+          </button>
+          <button class="reel-ctrl-btn" id="reelMuteBtn" onclick="toggleReelMute()" aria-label="Mute/Unmute">
+            <span id="reelMuteIcon">🔇</span>
+          </button>
+          <span class="reel-time" id="reelTime">0:00 / 0:00</span>
+        </div>
       </div>
     </div>
   </section>
