@@ -5,14 +5,12 @@ require('dotenv').config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: '*' }));
 
-// 1. Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log("Connected to MongoDB Atlas"))
   .catch(err => console.error("Could not connect to MongoDB", err));
 
-// 2. Define Data Schemas
 const OrderSchema = new mongoose.Schema({
   name: String, phone: String, address: String,
   items: Array, total: String, notes: String,
@@ -26,7 +24,6 @@ const ReviewSchema = new mongoose.Schema({
 });
 const Review = mongoose.model('Review', ReviewSchema);
 
-// 3. API Routes
 app.post('/api/order', async (req, res) => {
   const newOrder = new Order(req.body);
   await newOrder.save();
@@ -49,6 +46,5 @@ app.get('/api/reviews', async (req, res) => {
   res.json(reviews);
 });
 
-// Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
