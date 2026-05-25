@@ -2,7 +2,7 @@
    PARESALAMAT – ADMIN SCRIPT (WITH FALLBACK)
    ============================================= */
 
-const API_URL = "https://paresalamat-backend.onrender.com"; // 👈 CHANGE THIS
+const API_URL = "https://paresalamat-backend.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchAdminOrders();
