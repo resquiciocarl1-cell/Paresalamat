@@ -228,11 +228,153 @@ function closeSuccess() { document.getElementById("successModal").classList.remo
 // ============================================
 // IMAGE LIGHTBOX
 // ============================================
+// ============================================
+// IMAGE LIGHTBOX WITH ZOOM
+// ============================================
+let lbScale = 1;
+let lbX = 0;
+let lbY = 0;
+let lbDragging = false;
+let lbLastX = 0;
+let lbLastY = 0;
+let lbPinchDist = null;
+
 function openImageModal(src) {
-  document.getElementById("lightboxImage").src = src;
-  document.getElementById("imageModal").classList.add("open");
+  const img = document.getElementById("lightboxImage");
+  const modal = document.getElementById("imageModal");
+  img.src = src;
+  modal.classList.add("open");
+  lbScale = 1; lbX = 0; lbY = 0;
+  applyLbTransform();
+  updateZoomLevel();
+
+  if (!document.getElementById("zoomControls")) {
+    const controls = document.createElement("div");
+    controls.className = "zoom-controls";
+    controls.id = "zoomControls";
+    controls.innerHTML = `
+      −
+      100%
+      +
+      ↺
+    `;
+    modal.appendChild(controls);
+  }
 }
-function closeImageModal() { document.getElementById("imageModal").classList.remove("open"); }
+
+function closeImageModal() {
+  document.getElementById("imageModal").classList.remove("open");
+  lbScale = 1; lbX = 0; lbY = 0;
+}
+
+function applyLbTransform() {
+  const img = document.getElementById("lightboxImage");
+  img.style.transform = `translate(${lbX}px, ${lbY}px) scale(${lbScale})`;
+}
+
+function updateZoomLevel() {
+  const el = document.getElementById("zoomLevel");
+  if (el) el.textContent = Math.round(lbScale * 100) + "%";
+}
+
+function lbZoom(delta) {
+  lbScale = Math.min(5, Math.max(0.5, lbScale + delta));
+  if (lbScale === 1) { lbX = 0; lbY = 0; }
+  applyLbTransform();
+  updateZoomLevel();
+}
+
+function lbReset() {
+  lbScale = 1; lbX = 0; lbY = 0;
+  applyLbTransform();
+  updateZoomLevel();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const img = document.getElementById("lightboxImage");
+  if (!img) return;
+
+  // Mouse wheel zoom
+  img.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    lbZoom(e.deltaY < 0 ? 0.15 : -0.15);
+  }, { passive: false });
+
+  // Mouse drag to pan
+  img.addEventListener("mousedown", (e) => {
+    if (lbScale <= 1) return;
+    e.preventDefault();
+    lbDragging = true;
+    lbLastX = e.clientX;
+    lbLastY = e.clientY;
+    img.classList.add("dragging");
+  });
+  document.addEventListener("mousemove", (e) => {
+    if (!lbDragging) return;
+    lbX += e.clientX - lbLastX;
+    lbY += e.clientY - lbLastY;
+    lbLastX = e.clientX;
+    lbLastY = e.clientY;
+    applyLbTransform();
+  });
+  document.addEventListener("mouseup", () => {
+    lbDragging = false;
+    img.classList.remove("dragging");
+  });
+
+  // Touch: pinch to zoom + drag to pan
+  img.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 2) {
+      lbPinchDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+    } else if (e.touches.length === 1 && lbScale > 1) {
+      lbDragging = true;
+      lbLastX = e.touches[0].clientX;
+      lbLastY = e.touches[0].clientY;
+    }
+    e.stopPropagation();
+  }, { passive: true });
+
+  img.addEventListener("touchmove", (e) => {
+    if (e.touches.length === 2 && lbPinchDist !== null) {
+      const newDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const delta = (newDist - lbPinchDist) * 0.01;
+      lbScale = Math.min(5, Math.max(0.5, lbScale + delta));
+      lbPinchDist = newDist;
+      applyLbTransform();
+      updateZoomLevel();
+    } else if (e.touches.length === 1 && lbDragging) {
+      lbX += e.touches[0].clientX - lbLastX;
+      lbY += e.touches[0].clientY - lbLastY;
+      lbLastX = e.touches[0].clientX;
+      lbLastY = e.touches[0].clientY;
+      applyLbTransform();
+    }
+    e.stopPropagation();
+  }, { passive: true });
+
+  img.addEventListener("touchend", (e) => {
+    if (e.touches.length < 2) lbPinchDist = null;
+    if (e.touches.length === 0) lbDragging = false;
+  });
+
+  // Double-click to toggle zoom
+  img.addEventListener("dblclick", (e) => {
+    e.stopPropagation();
+    if (lbScale > 1) {
+      lbReset();
+    } else {
+      lbScale = 2.5;
+      applyLbTransform();
+      updateZoomLevel();
+    }
+  });
+});
 
 // ============================================
 // REVIEWS LOGIC
