@@ -1398,3 +1398,96 @@ ul { list-style: none; }
   text-align: center;
   font-family: var(--font-body);
 }
+/* =============================================
+   REEL VIDEO CONTROLS (YouTube-style)
+   ============================================= */
+.reel-controls {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 0.5rem 0.75rem 0.75rem;
+  background: linear-gradient(0deg, rgba(0,0,0,0.75) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+.reel-wrapper:hover .reel-controls,
+.reel-wrapper.paused .reel-controls {
+  opacity: 1;
+}
+
+.reel-progress-wrap {
+  width: 100%;
+  padding: 6px 0;
+  cursor: pointer;
+  position: relative;
+}
+.reel-progress-bg {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+  position: relative;
+  transition: height 0.15s;
+}
+.reel-progress-wrap:hover .reel-progress-bg {
+  height: 6px;
+}
+.reel-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--red);
+  border-radius: 4px;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+.reel-progress-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 14px; height: 14px;
+  background: var(--white);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.15s, left 0.1s linear;
+}
+.reel-progress-wrap:hover .reel-progress-thumb {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.reel-ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+.reel-ctrl-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 1.1rem;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.reel-ctrl-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+.reel-time {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.5px;
+  margin-left: 0.25rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .reel-ctrl-btn { width: 28px; height: 28px; font-size: 1rem; }
+  .reel-time { font-size: 0.72rem; }
+}
