@@ -3,20 +3,16 @@
    ============================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Load orders by default when the dashboard opens
   fetchAdminOrders();
 });
 
-// Function to handle switching between Orders and Reviews views
+// Switch between Orders and Reviews views
 function switchTab(tabId, btnElement) {
-  // Update sidebar buttons
   document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
   btnElement.classList.add('active');
 
-  // Hide all views
   document.querySelectorAll('.admin-view').forEach(view => view.style.display = 'none');
 
-  // Show selected view and fetch fresh data
   if (tabId === 'orders') {
     document.getElementById('ordersView').style.display = 'block';
     document.getElementById('pageTitle').textContent = 'Recent Orders';
@@ -28,13 +24,13 @@ function switchTab(tabId, btnElement) {
   }
 }
 
-// Fetch and display Orders from MongoDB
+// Fetch and display Orders
 async function fetchAdminOrders() {
   const tableBody = document.getElementById('ordersTableBody');
   const countEl = document.getElementById('totalCount');
   
   try {
-    const response = await fetch('/api/order'); // Calling your Node.js backend
+    const response = await fetch('/api/order'); 
     if (!response.ok) throw new Error("Network response was not ok");
     
     const orders = await response.json();
@@ -46,10 +42,7 @@ async function fetchAdminOrders() {
     }
 
     tableBody.innerHTML = orders.map(order => {
-      // Format items array into a readable string
       const itemList = order.items ? order.items.map(i => `${i.qty}x ${i.name}`).join(', ') : 'N/A';
-      
-      // Determine delivery styling
       const typeClass = order.type === 'delivery' ? 'badge-delivery' : 'badge-pickup';
 
       return `
@@ -73,13 +66,13 @@ async function fetchAdminOrders() {
   }
 }
 
-// Fetch and display Reviews from MongoDB
+// Fetch and display Reviews
 async function fetchAdminReviews() {
   const tableBody = document.getElementById('reviewsTableBody');
   const countEl = document.getElementById('totalCount');
 
   try {
-    const response = await fetch('/api/reviews'); // Calling your Node.js backend
+    const response = await fetch('/api/reviews'); 
     if (!response.ok) throw new Error("Network response was not ok");
 
     const reviews = await response.json();
@@ -112,4 +105,10 @@ async function fetchAdminReviews() {
     console.error("Error fetching reviews:", error);
     tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--red);">Error connecting to database. Make sure your Node server is running.</td></tr>`;
   }
+}
+
+// Logout Logic
+function logout() {
+  localStorage.removeItem("paresAdminAuth");
+  window.location.href = "login.html";
 }
