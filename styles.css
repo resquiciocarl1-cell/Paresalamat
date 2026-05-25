@@ -1232,9 +1232,6 @@ ul { list-style: none; }
 .admin-table tr:hover td { background: var(--cream-light); }
 .badge-delivery { color: #C4281A; font-weight: 800; }
 .badge-pickup { color: #D15A1E; font-weight: 800; }
-/* =============================================
-   DEMO REEL SECTION
-   ============================================= */
 .reel-section {
   padding: 5rem 3rem;
   max-width: 1100px;
@@ -1246,7 +1243,9 @@ ul { list-style: none; }
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-warm);
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 9 / 16;
+  max-width: 420px;
+  margin: 0 auto;
   background: var(--brown-dark);
   cursor: pointer;
 }
@@ -1289,7 +1288,6 @@ ul { list-style: none; }
   pointer-events: all;
   backdrop-filter: blur(6px);
   transition: background 0.2s, transform 0.2s, border-color 0.2s;
-  padding-left: 5px; /* optical center for play icon */
 }
 
 .reel-play-btn:hover {
@@ -1310,26 +1308,8 @@ ul { list-style: none; }
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Muted indicator */
-.reel-wrapper::after {
-  content: '🔇 Tap to unmute';
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  background: rgba(46, 16, 8, 0.6);
-  color: var(--cream-light);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.3rem 0.75rem;
-  border-radius: 50px;
-  backdrop-filter: blur(4px);
-  transition: opacity 0.3s;
-}
-.reel-wrapper.unmuted::after {
-  content: '🔊 Sound on';
-}
-
 @media (max-width: 768px) {
   .reel-section { padding: 4rem 1.25rem; }
+  .reel-wrapper { max-width: 100%; }
   .reel-play-btn { width: 56px; height: 56px; font-size: 1.2rem; }
 }
