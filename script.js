@@ -416,28 +416,29 @@ function sendMessage() {
 // DEMO REEL TOGGLE (mute / unmute + play/pause)
 // ============================================
 function toggleReel() {
-  const video   = document.querySelector(".reel-video");
-  const btn     = document.getElementById("reelPlayBtn");
+  const video   = document.getElementById("reelVideo");
   const icon    = document.getElementById("reelIcon");
-  const wrapper = document.querySelector(".reel-wrapper");
+  const wrapper = document.getElementById("reelWrapper");
 
   if (!video) return;
 
-  // First click: unmute (video is already autoplaying muted)
+  // First click: unmute and mark as active so overlay hides
   if (video.muted) {
-    video.muted = false;
-    wrapper.classList.add("unmuted");
+    video.muted  = false;
+    video.volume = 1;
     icon.textContent = "⏸";
+    wrapper.classList.add("active");
     return;
   }
 
-  // Subsequent clicks: play / pause
+  // Subsequent clicks: pause / play
   if (video.paused) {
     video.play();
     icon.textContent = "⏸";
+    wrapper.classList.add("active");
   } else {
     video.pause();
     icon.textContent = "▶";
+    wrapper.classList.remove("active");
   }
-}
 }
