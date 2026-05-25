@@ -2,6 +2,8 @@
    PARESALAMAT – FULL SCRIPT.JS
    ============================================= */
 
+const API_URL = "https://paresalamat-backend.onrender.com";
+
 // ---- MENU DATA ----
 const menuItems = [
   { id: 1, name: "Pares Mami", price: 40, desc: "Classic pares broth with mami noodles – the ultimate comfort combo.", img: "pares_mami.jpg", category: "budget", popular: false },
@@ -53,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ============================================
 function renderMenu(filter = "all") {
   const grid = document.getElementById("menuGrid");
-  if (!grid) return; // Safeguard
+  if (!grid) return;
 
   const filtered = filter === "all" ? menuItems : menuItems.filter(i => i.category === filter);
 
@@ -187,11 +189,12 @@ async function placeOrder() {
     address: document.getElementById("custAddress").value,
     items: cart,
     total: document.getElementById("cartTotal").textContent,
+    type: deliveryType,
     notes: document.getElementById("custNotes").value
   };
 
   try {
-    await fetch('/api/order', {
+    await fetch(API_URL + '/api/order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
@@ -232,18 +235,17 @@ function openImageModal(src) {
 function closeImageModal() { document.getElementById("imageModal").classList.remove("open"); }
 
 // ============================================
-// OTHER FEATURES & REVIEWS LOGIC
+// REVIEWS LOGIC
 // ============================================
-
 let currentRating = 5;
 
 async function fetchReviewsFromDB() {
   try {
-    const res = await fetch('/api/reviews');
+    const res = await fetch(API_URL + '/api/reviews');
     if (res.ok) {
       const dbReviews = await res.json();
       if (dbReviews.length > 0) {
-        reviews = dbReviews; 
+        reviews = dbReviews;
       }
     }
   } catch (e) {
@@ -289,18 +291,14 @@ function initStarRating() {
   stars.forEach(s => {
     s.style.cursor = "pointer";
     s.style.fontSize = "1.8rem";
-    s.style.color = "#FACC15"; 
+    s.style.color = "#FACC15";
   });
 
   stars.forEach(star => {
     star.addEventListener("click", function() {
       currentRating = parseInt(this.getAttribute("data-val"));
       stars.forEach((s, index) => {
-        if (index < currentRating) {
-          s.style.color = "#FACC15"; 
-        } else {
-          s.style.color = "#E5E7EB"; 
-        }
+        s.style.color = index < currentRating ? "#FACC15" : "#E5E7EB";
       });
     });
   });
@@ -324,7 +322,7 @@ async function submitReview() {
   };
 
   try {
-    await fetch('/api/reviews', {
+    await fetch(API_URL + '/api/reviews', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newReview)
@@ -346,6 +344,9 @@ async function submitReview() {
   }
 }
 
+// ============================================
+// SCROLL & NAV
+// ============================================
 function initScrollEffects() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
@@ -358,7 +359,7 @@ function toggleMenu() { document.getElementById("navLinks").classList.toggle("op
 function closeMenu() { document.getElementById("navLinks").classList.remove("open"); }
 
 // ============================================
-// MESSAGE FORM LOGIC (CORS BYPASS FIX)
+// MESSAGE FORM LOGIC
 // ============================================
 function sendMessage() {
   const name = document.getElementById("msgName").value.trim();
@@ -375,13 +376,11 @@ function sendMessage() {
   btn.textContent = "Sending...";
   btn.disabled = true;
 
-  // Create an invisible form to bypass CORS restrictions
   const form = document.createElement("form");
   form.method = "POST";
-  form.action = "https://formsubmit.co/resquiciocarl1@gmail.com"; 
-  form.target = "_blank"; // Opens the FormSubmit confirmation in a new tab
+  form.action = "https://formsubmit.co/resquiciocarl1@gmail.com";
+  form.target = "_blank";
 
-  // Helper to add hidden inputs
   const addInput = (inputName, inputValue) => {
     const input = document.createElement("input");
     input.type = "hidden";
@@ -390,20 +389,17 @@ function sendMessage() {
     form.appendChild(input);
   };
 
-  // Add inputs
   addInput("name", name);
   addInput("email", email);
   addInput("message", body);
   addInput("_subject", `New Paresalamat Message from ${name}`);
-  addInput("_captcha", "false"); 
+  addInput("_captcha", "false");
   addInput("_template", "table");
 
-  // Submit the form directly to FormSubmit
   document.body.appendChild(form);
   form.submit();
   document.body.removeChild(form);
 
-  // Show success message and reset UI
   document.getElementById("msgSuccess").style.display = "block";
   document.getElementById("msgName").value = "";
   document.getElementById("msgEmail").value = "";
@@ -413,7 +409,6 @@ function sendMessage() {
     document.getElementById("msgSuccess").style.display = "none";
   }, 4000);
 
-  // Reset button
   btn.textContent = originalText;
   btn.disabled = false;
 }
