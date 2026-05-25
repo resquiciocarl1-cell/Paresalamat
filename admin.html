@@ -9,6 +9,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+
+  <script>
+    // If the admin is not logged in, kick them back to the login page immediately
+    if (localStorage.getItem("paresAdminAuth") !== "true") {
+      window.location.href = "login.html";
+    }
+  </script>
 </head>
 <body class="admin-body">
 
@@ -22,6 +29,10 @@
         <li><button class="admin-nav-btn active" onclick="switchTab('orders', this)">📋 Manage Orders</button></li>
         <li><button class="admin-nav-btn" onclick="switchTab('reviews', this)">⭐ Customer Reviews</button></li>
         <li><a href="index.html" class="admin-nav-link">⬅ Back to Live Site</a></li>
+        
+        <li style="margin-top: 2rem;">
+          <button class="admin-nav-btn" style="color: var(--red);" onclick="logout()">🚪 Log Out</button>
+        </li>
       </ul>
     </aside>
 
