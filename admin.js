@@ -2,19 +2,15 @@
    PARESALAMAT – ADMIN SCRIPT (WITH FALLBACK)
    ============================================= */
 
-// Configuration: If your Node.js server is running locally on port 3000, 
-// change this to "http://localhost:3000". Otherwise, leave it as "" for Vercel.
-const API_URL = "";
+const API_URL = "https://paresalamat-backend.onrender.com"; // 👈 CHANGE THIS
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchAdminOrders();
 });
 
-// Switch between Orders and Reviews views
 function switchTab(tabId, btnElement) {
   document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
   btnElement.classList.add('active');
-
   document.querySelectorAll('.admin-view').forEach(view => view.style.display = 'none');
 
   if (tabId === 'orders') {
@@ -28,7 +24,6 @@ function switchTab(tabId, btnElement) {
   }
 }
 
-// Fetch and display Orders
 async function fetchAdminOrders() {
   const tableBody = document.getElementById('ordersTableBody');
   const countEl = document.getElementById('totalCount');
@@ -36,38 +31,29 @@ async function fetchAdminOrders() {
   try {
     const response = await fetch(API_URL + '/api/order'); 
     if (!response.ok) throw new Error("Network response was not ok");
-    
     const orders = await response.json();
     renderOrdersTable(orders, tableBody, countEl);
 
   } catch (error) {
     console.warn("Backend not found. Loading sample database data for demonstration...");
-    
-    // FALLBACK: If the database is offline, show this sample data to save the presentation
     const sampleOrders = [
       { createdAt: new Date().toISOString(), name: "Juan dela Cruz", phone: "09123456789", total: "₱269", type: "delivery", items: [{qty: 1, name: "Fourth's Bowl"}, {qty: 1, name: "Pares Mami"}], notes: "Extra chili oil please" },
       { createdAt: new Date(Date.now() - 86400000).toISOString(), name: "Maria Santos", phone: "09987654321", total: "₱159", type: "pickup", items: [{qty: 1, name: "Basic Overload"}], notes: "None" }
     ];
-    
     renderOrdersTable(sampleOrders, tableBody, countEl);
-    // Add a visual indicator that the live DB is disconnected
     document.getElementById('pageTitle').innerHTML = 'Recent Orders <span style="color:var(--red); font-size: 1rem; vertical-align: middle;">(Offline Mode)</span>';
   }
 }
 
-// Helper to draw the Orders table
 function renderOrdersTable(orders, tableBody, countEl) {
   countEl.textContent = orders.length;
-
   if (orders.length === 0) {
     tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No orders found.</td></tr>`;
     return;
   }
-
   tableBody.innerHTML = orders.map(order => {
     const itemList = order.items ? order.items.map(i => `${i.qty}x ${i.name}`).join('<br>') : 'N/A';
     const typeClass = order.type === 'delivery' ? 'badge-delivery' : 'badge-pickup';
-
     return `
       <tr>
         <td><strong>${new Date(order.createdAt || Date.now()).toLocaleDateString()}</strong></td>
@@ -84,7 +70,6 @@ function renderOrdersTable(orders, tableBody, countEl) {
   }).join('');
 }
 
-// Fetch and display Reviews
 async function fetchAdminReviews() {
   const tableBody = document.getElementById('reviewsTableBody');
   const countEl = document.getElementById('totalCount');
@@ -92,34 +77,27 @@ async function fetchAdminReviews() {
   try {
     const response = await fetch(API_URL + '/api/reviews'); 
     if (!response.ok) throw new Error("Network response was not ok");
-
     const reviews = await response.json();
     renderReviewsTable(reviews, tableBody, countEl);
 
   } catch (error) {
     console.warn("Backend not found. Loading sample database data for demonstration...");
-    
-    // FALLBACK: Sample reviews if database is offline
     const sampleReviews = [
       { date: "March 2024", name: "Maria Santos", stars: 5, text: "Grabe, the All-In Overload hit different! First time ko pero definitely babalik ako.", avatar: "M" },
       { date: "February 2024", name: "Jomar Reyes", stars: 5, text: "Fourth's Bowl is no joke — the wagyu cubes are so tender.", avatar: "J" },
       { date: "January 2024", name: "Ate Nena", stars: 5, text: "Dito na kami lagi kumakain ng pamilya ko.", avatar: "A" }
     ];
-
     renderReviewsTable(sampleReviews, tableBody, countEl);
     document.getElementById('pageTitle').innerHTML = 'Customer Reviews <span style="color:var(--red); font-size: 1rem; vertical-align: middle;">(Offline Mode)</span>';
   }
 }
 
-// Helper to draw the Reviews table
 function renderReviewsTable(reviews, tableBody, countEl) {
   countEl.textContent = reviews.length;
-
   if (reviews.length === 0) {
     tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No reviews found.</td></tr>`;
     return;
   }
-
   tableBody.innerHTML = reviews.map(rev => `
     <tr>
       <td><strong>${rev.date || 'Recent'}</strong></td>
@@ -139,7 +117,6 @@ function renderReviewsTable(reviews, tableBody, countEl) {
   `).join('');
 }
 
-// Logout Logic
 function logout() {
   localStorage.removeItem("paresAdminAuth");
   window.location.href = "login.html";
