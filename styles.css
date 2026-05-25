@@ -1232,3 +1232,104 @@ ul { list-style: none; }
 .admin-table tr:hover td { background: var(--cream-light); }
 .badge-delivery { color: #C4281A; font-weight: 800; }
 .badge-pickup { color: #D15A1E; font-weight: 800; }
+/* =============================================
+   DEMO REEL SECTION
+   ============================================= */
+.reel-section {
+  padding: 5rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.reel-wrapper {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-warm);
+  aspect-ratio: 16 / 9;
+  background: var(--brown-dark);
+  cursor: pointer;
+}
+
+.reel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.4s;
+}
+
+.reel-wrapper:hover .reel-video {
+  filter: brightness(0.75);
+}
+
+.reel-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  pointer-events: none;
+}
+
+.reel-play-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  color: var(--white);
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: all;
+  backdrop-filter: blur(6px);
+  transition: background 0.2s, transform 0.2s, border-color 0.2s;
+  padding-left: 5px; /* optical center for play icon */
+}
+
+.reel-play-btn:hover {
+  background: var(--red);
+  border-color: var(--red);
+  transform: scale(1.12);
+}
+
+.reel-badge {
+  background: rgba(46, 16, 8, 0.65);
+  color: var(--cream-light);
+  font-family: var(--font-brand);
+  font-size: 0.95rem;
+  padding: 0.4rem 1.2rem;
+  border-radius: 50px;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Muted indicator */
+.reel-wrapper::after {
+  content: '🔇 Tap to unmute';
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(46, 16, 8, 0.6);
+  color: var(--cream-light);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 50px;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s;
+}
+.reel-wrapper.unmuted::after {
+  content: '🔊 Sound on';
+}
+
+@media (max-width: 768px) {
+  .reel-section { padding: 4rem 1.25rem; }
+  .reel-play-btn { width: 56px; height: 56px; font-size: 1.2rem; }
+}
