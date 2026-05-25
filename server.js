@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config(); // Allows using process.env.MONGODB_URI
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
@@ -14,14 +14,14 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // 2. Define Data Schemas
 const OrderSchema = new mongoose.Schema({
-  name: String, phone: String, address: String, 
+  name: String, phone: String, address: String,
   items: Array, total: String, notes: String,
   createdAt: { type: Date, default: Date.now }
 });
 const Order = mongoose.model('Order', OrderSchema);
 
 const ReviewSchema = new mongoose.Schema({
-  name: String, stars: Number, text: String, 
+  name: String, stars: Number, text: String,
   avatar: String, date: String
 });
 const Review = mongoose.model('Review', ReviewSchema);
