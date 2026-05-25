@@ -555,33 +555,88 @@ function sendMessage() {
   btn.disabled = false;
 }
 
+
 // ============================================
-// DEMO REEL TOGGLE (mute / unmute + play/pause)
+// DEMO REEL – YouTube-style controls
 // ============================================
-function toggleReel() {
+(function initReelControls() {
+  document.addEventListener("DOMContentLoaded", () => {
+    const video    = document.getElementById("reelVideo");
+    const wrapper  = document.getElementById("reelWrapper");
+    const fill     = document.getElementById("reelFill");
+    const thumb    = document.getElementById("reelThumb");
+    const timeEl   = document.getElementById("reelTime");
+    const playIcon = document.getElementById("reelPlayIcon");
+    const muteIcon = document.getElementById("reelMuteIcon");
+    const progWrap = document.getElementById("reelProgressWrap");
+    if (!video) return;
+
+    function formatTime(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2, "0")}`;
+    }
+
+    function updateBar() {
+      if (!video.duration) return;
+      const pct = (video.currentTime / video.duration) * 100;
+      fill.style.width  = pct + "%";
+      thumb.style.left  = pct + "%";
+      const cur = formatTime(video.currentTime);
+      const dur = formatTime(video.duration);
+      timeEl.textContent = `${cur} / ${dur}`;
+    }
+
+    function syncIcons() {
+      playIcon.textContent = video.paused ? "▶" : "⏸";
+      muteIcon.textContent = video.muted  ? "🔇" : "🔊";
+      wrapper.classList.toggle("paused", video.paused);
+    }
+
+    video.addEventListener("timeupdate", updateBar);
+    video.addEventListener("loadedmetadata", updateBar);
+    video.addEventListener("play",  syncIcons);
+    video.addEventListener("pause", syncIcons);
+
+    // Seek on click/drag
+    function seek(e) {
+      const rect = progWrap.getBoundingClientRect();
+      const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      video.currentTime = pct * video.duration;
+    }
+    let seeking = false;
+    progWrap.addEventListener("mousedown", e => { seeking = true; seek(e); });
+    document.addEventListener("mousemove",  e => { if (seeking) seek(e); });
+    document.addEventListener("mouseup",    ()  => { seeking = false; });
+
+    // Touch seek
+    progWrap.addEventListener("touchstart", e => {
+      seek(e.touches[0]); e.preventDefault();
+    }, { passive: false });
+    progWrap.addEventListener("touchmove",  e => {
+      seek(e.touches[0]); e.preventDefault();
+    }, { passive: false });
+
+    syncIcons();
+  });
+})();
+
+function toggleReelPlay() {
   const video   = document.getElementById("reelVideo");
-  const icon    = document.getElementById("reelIcon");
   const wrapper = document.getElementById("reelWrapper");
-
   if (!video) return;
-
-  // First click: unmute and mark as active so overlay hides
-  if (video.muted) {
-    video.muted  = false;
-    video.volume = 1;
-    icon.textContent = "⏸";
-    wrapper.classList.add("active");
-    return;
-  }
-
-  // Subsequent clicks: pause / play
-  if (video.paused) {
-    video.play();
-    icon.textContent = "⏸";
-    wrapper.classList.add("active");
-  } else {
-    video.pause();
-    icon.textContent = "▶";
-    wrapper.classList.remove("active");
-  }
+  // First interaction: unmute
+  if (video.muted) { video.muted = false; video.volume = 1; }
+  video.paused ? video.play() : video.pause();
+  wrapper.classList.toggle("paused", video.paused);
 }
+
+function toggleReelMute() {
+  const video = document.getElementById("reelVideo");
+  if (!video) return;
+  video.muted = !video.muted;
+  document.getElementById("reelMuteIcon").textContent = video.muted ? "🔇" : "🔊";
+}
+
+// Keep old toggleReel() stub so nothing breaks if called elsewhere
+function toggleReel() { toggleReelPlay(); }
