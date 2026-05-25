@@ -131,7 +131,7 @@ function updateCartUI() {
       </div>
     </div>
   `).join("");
-  
+
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const delivery = deliveryType === "delivery" ? 60 : 0;
   document.getElementById("cartSubtotal").textContent = `₱${total}`;
@@ -214,7 +214,7 @@ async function placeOrder() {
     `📝 *Notes:* ${orderData.notes}\n\n` +
     `💳 *Payment:* Screenshot attached to chat.`
   );
-  
+
   window.open(`https://wa.me/639948243867?text=${msg}`, "_blank");
 
   cart = [];
@@ -336,9 +336,9 @@ async function submitReview() {
   document.getElementById("reviewText").value = "";
   currentRating = 5;
   document.querySelectorAll("#starRating span").forEach(s => s.style.color = "#FACC15");
-  
+
   const successMsg = document.getElementById("reviewSuccess");
-  if(successMsg) {
+  if (successMsg) {
     successMsg.style.display = "block";
     setTimeout(() => { successMsg.style.display = "none"; }, 3000);
   }
@@ -365,12 +365,12 @@ function sendMessage() {
   const name = document.getElementById("msgName").value.trim();
   const email = document.getElementById("msgEmail").value.trim();
   const body = document.getElementById("msgBody").value.trim();
-  
-  if(!name || !email || !body) {
+
+  if (!name || !email || !body) {
     alert("Please fill out all fields before sending.");
     return;
   }
-  
+
   const btn = document.querySelector(".message-form .btn-primary");
   const originalText = btn.textContent;
   btn.textContent = "Sending...";
@@ -411,8 +411,9 @@ function sendMessage() {
 
   btn.textContent = originalText;
   btn.disabled = false;
+}
 
-   // ============================================
+// ============================================
 // DEMO REEL TOGGLE (mute / unmute + play/pause)
 // ============================================
 function toggleReel() {
