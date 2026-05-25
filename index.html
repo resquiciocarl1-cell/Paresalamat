@@ -167,6 +167,34 @@
     </div>
   </div>
 
+  <!-- ===== DEMO REEL SECTION ===== -->
+  <section class="reel-section" id="reel">
+    <div class="section-header">
+      <div class="section-tag">Watch &amp; Crave</div>
+      <h2>See the <span>Legend</span> in Action</h2>
+      <p>A quick look at what makes every bowl unforgettable</p>
+    </div>
+    <div class="reel-wrapper" id="reelWrapper">
+      <video
+        class="reel-video"
+        id="reelVideo"
+        src="lv_0_20260524141007(1).mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="fourth's_bowl.jpg"
+      ></video>
+      <div class="reel-overlay">
+        <button class="reel-play-btn" id="reelPlayBtn" onclick="toggleReel()">
+          <span id="reelIcon">🔇</span>
+        </button>
+        <div class="reel-badge">🍲 Paresalamat – Valenzuela's Finest</div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== END DEMO REEL ===== -->
+
   <section class="menu-section" id="menu">
     <div class="section-header">
       <div class="section-tag">Our Menu</div>
@@ -183,7 +211,7 @@
     </div>
 
     <div class="menu-grid" id="menuGrid">
-      </div>
+    </div>
   </section>
 
   <section class="about-section" id="about">
@@ -319,7 +347,8 @@
       <button onclick="scrollReviews(-1)" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #8B0000; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; z-index: 10; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;" onmouseover="this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.transform='translateY(-50%) scale(1)'">‹</button>
 
       <div id="reviewsGrid" style="display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; padding: 1rem 0; scrollbar-width: none; -ms-overflow-style: none; scroll-snap-type: x mandatory;">
-        <style>#reviewsGrid::-webkit-scrollbar { display: none; }</style> </div>
+        <style>#reviewsGrid::-webkit-scrollbar { display: none; }</style>
+      </div>
 
       <button onclick="scrollReviews(1)" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: #8B0000; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; z-index: 10; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;" onmouseover="this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.transform='translateY(-50%) scale(1)'">›</button>
     </div>
@@ -466,7 +495,7 @@
     </div>
     
     <div class="footer-bottom">
-      <p>© 2024 Paresalamat. All rights reserved. Made with in Valenzuela.</p>
+      <p>© 2024 Paresalamat. All rights reserved. Made with ❤ in Valenzuela.</p>
     </div>
   </footer>
 
