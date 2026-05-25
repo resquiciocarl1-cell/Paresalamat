@@ -411,4 +411,33 @@ function sendMessage() {
 
   btn.textContent = originalText;
   btn.disabled = false;
+
+   // ============================================
+// DEMO REEL TOGGLE (mute / unmute + play/pause)
+// ============================================
+function toggleReel() {
+  const video   = document.querySelector(".reel-video");
+  const btn     = document.getElementById("reelPlayBtn");
+  const icon    = document.getElementById("reelIcon");
+  const wrapper = document.querySelector(".reel-wrapper");
+
+  if (!video) return;
+
+  // First click: unmute (video is already autoplaying muted)
+  if (video.muted) {
+    video.muted = false;
+    wrapper.classList.add("unmuted");
+    icon.textContent = "⏸";
+    return;
+  }
+
+  // Subsequent clicks: play / pause
+  if (video.paused) {
+    video.play();
+    icon.textContent = "⏸";
+  } else {
+    video.pause();
+    icon.textContent = "▶";
+  }
+}
 }
