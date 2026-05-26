@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paresalamat – Home & Order</title>
+  <link rel="icon" type="image/jpeg" href="favicon.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== CART OVERLAY & SIDEBAR ===== -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>Your Order</h2>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <p class="cart-empty">Your cart is empty.<br/>Start adding some pares!</p>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">₱0</span>
+      </div>
+      <div class="cart-delivery-info">
+        <label>
+          <input type="radio" name="orderType" value="pickup" checked onchange="updateOrderType(this)"/> Pickup
+        </label>
+        <label>
+          <input type="radio" name="orderType" value="delivery" onchange="updateOrderType(this)"/> Delivery (+₱60)
+        </label>
+      </div>
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cartTotal">₱0</span>
+      </div>
+      <button class="btn-checkout" onclick="openGcashModal()">Proceed to Checkout</button>
+    </div>
+  </aside>
+
+  <!-- ===== GCASH MODAL ===== -->
+  <div class="modal-overlay" id="gcashModal">
+    <div class="modal-box" style="text-align: center;">
+      <button class="modal-close" onclick="closeGcashModal()">✕</button>
+      <h2>Pay via GCash</h2>
+      <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 1.5rem;">
+        Scan the QR code below to pay. <br/><strong>Please save a screenshot of your receipt!</strong>
+      </p>
+      <img src="GcashQR.jpg" alt="GCash QR Code" style="max-width: 100%; max-height: 350px; border-radius: 16px; margin-bottom: 1.5rem; box-shadow: var(--shadow-soft);" />
+      <button class="btn-checkout" onclick="proceedToForm()">I have paid, continue</button>
+    </div>
+  </div>
+
+  <!-- ===== CHECKOUT MODAL ===== -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeCheckout()">✕</button>
+      <h2>Complete Your Order</h2>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="custName" placeholder="Juan dela Cruz" />
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="custPhone" placeholder="09XXXXXXXXX" />
+      </div>
+      <div class="form-group" id="addressGroup" style="display:none;">
+        <label>Delivery Address</label>
+        <textarea id="custAddress" placeholder="House No., Street, Barangay, City"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Special Instructions (optional)</label>
+        <textarea id="custNotes" placeholder="e.g. Extra soup, less spice…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Proof of Payment (Screenshot)</label>
+        <input type="file" id="proofImage" accept="image/*" style="background: var(--white); padding: 0.5rem;" />
+        <small style="color: var(--red); font-size: 0.8rem; display: block; margin-top: 0.4rem; font-weight: 700;">
+          *Important: WhatsApp cannot auto-attach images. Please hit 'Send' on the photo once the chat opens.
+        </small>
+      </div>
+      <div class="order-summary-mini" id="orderSummaryMini"></div>
+      <button class="btn-checkout" onclick="placeOrder()">Place Order via WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- ===== SUCCESS MODAL ===== -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-box success-box">
+      <div class="success-icon"></div>
+      <h2>Order Sent!</h2>
+      <p>Your order has been forwarded. We'll confirm shortly via call or message.</p>
+      <button class="btn-checkout" onclick="closeSuccess()">Back to Menu</button>
+    </div>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-text">Pares<em>alamat</em></span>
+    </a>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-active" onclick="closeMenu()">Home</a></li>
+      <li><a href="#menu" onclick="closeMenu()">Order</a></li>
+      <li><a href="about.html" onclick="closeMenu()">About Us</a></li>
+      <li><a href="about.html#gallery" onclick="closeMenu()">Gallery</a></li>
+      <li><a href="reviews.html" onclick="closeMenu()">Reviews</a></li>
+      <li><a href="reviews.html#contact" onclick="closeMenu()">Contact</a></li>
+    </ul>
+    <button class="nav-cart-btn" onclick="toggleCart()">
+      🛒 <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="home">
+    <div class="hero-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-tag">🔥 Valenzuela's Finest</div>
+      <h1 class="hero-title">PARES<span>ALAMAT</span></h1>
+      <p class="hero-sub">Legendary beef pares that hits different. Rich broth. Tender meat. Unbeatable value.</p>
+      <div class="hero-cta">
+        <a href="#menu" class="btn-primary">Order Now</a>
+        <a href="about.html" class="btn-ghost">Our Story</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong>500+</strong><span>Daily Customers</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>9</strong><span>Menu Items</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>⭐ 4.9</strong><span>Rating</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-bowl-card">
+        <div class="best-seller-badge">⭐ Best Seller</div>
+        <img src="fourth's_bowl.jpg" alt="Fourth's Bowl" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin: 0 auto 0.5rem; display: block;" />
+        <p>Fourth's Bowl</p>
+        <strong>₱229</strong>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll to explore</span>
+      <div class="scroll-arrow">↓</div>
+    </div>
+  </section>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>🍜 Pares Mami</span><span>🥟 Siomai Rice</span><span>🥩 Pares</span>
+      <span>🍖 Pares Mata</span><span>🧠 Pares Utak</span><span>💥 Basic Overload</span>
+      <span>🏆 All-In Overload</span><span>⭐ Fourth's Bowl</span>
+      <span>🍜 Pares Mami</span><span>🥟 Siomai Rice</span><span>🥩 Pares</span>
+      <span>🍖 Pares Mata</span><span>🧠 Pares Utak</span><span>💥 Basic Overload</span>
+      <span>🏆 All-In Overload</span><span>⭐ Fourth's Bowl</span>
+    </div>
+  </div>
+
+  <!-- ===== DEMO REEL ===== -->
+  <section class="reel-section" id="reel">
+    <div class="section-header">
+      <div class="section-tag">Watch &amp; Crave</div>
+      <h2>See the <span>Legend</span> in Action</h2>
+      <p>A quick look at what makes every bowl unforgettable</p>
+    </div>
+    <div class="reel-wrapper" id="reelWrapper">
+      <video
+        class="reel-video"
+        id="reelVideo"
+        src="lv_0_20260525220639 (1).mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="fourth's_bowl.jpg"
+      ></video>
+      <div class="reel-controls" id="reelControls">
+        <div class="reel-progress-wrap" id="reelProgressWrap">
+          <div class="reel-progress-bg">
+            <div class="reel-progress-fill" id="reelFill"></div>
+            <div class="reel-progress-thumb" id="reelThumb"></div>
+          </div>
+        </div>
+        <div class="reel-ctrl-row">
+          <button class="reel-ctrl-btn" id="reelPlayBtn" onclick="toggleReelPlay()" aria-label="Play/Pause">
+            <span id="reelPlayIcon">⏸</span>
+          </button>
+          <button class="reel-ctrl-btn" id="reelMuteBtn" onclick="toggleReelMute()" aria-label="Mute/Unmute">
+            <span id="reelMuteIcon">🔇</span>
+          </button>
+          <span class="reel-time" id="reelTime">0:00 / 0:00</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MENU / ORDERS ===== -->
+  <section class="menu-section" id="menu">
+    <div class="section-header">
+      <div class="section-tag">Our Menu</div>
+      <h2>Choose Your <span>Pares</span></h2>
+      <p>Fresh, made-to-order bowls crafted with love and heritage</p>
+    </div>
+    <div class="menu-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="budget">Budget Picks</button>
+      <button class="filter-btn" data-filter="classic">Classic</button>
+      <button class="filter-btn" data-filter="overload">Overload</button>
+      <button class="filter-btn" data-filter="special">Special</button>
+    </div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Pares<em>alamat</em></div>
+        <p>Legendary pares. Unbeatable value. Straight from Valenzuela's heart.</p>
+      </div>
+      <div class="footer-links-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#menu">Order Now</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#gallery">Gallery</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="reviews.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-col">
+        <h4>Contact</h4>
+        <ul>
+          <li>Maysan, Valenzuela City</li>
+          <li><a href="tel:09948243867">0994 824 3867</a></li>
+          <li>6:00 AM – 10:00 PM</li>
+          <li>Open Daily</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Paresalamat. All rights reserved. Made with ❤ in Valenzuela.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paresalamat – About Us & Gallery</title>
+  <link rel="icon" type="image/jpeg" href="favicon.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== IMAGE LIGHTBOX MODAL ===== -->
+  <div class="modal-overlay" id="imageModal" onclick="closeImageModal()">
+    <button class="modal-close" style="top: 1.5rem; right: 1.5rem; background: var(--white); color: var(--text-dark); width: 40px; height: 40px; font-size: 1.2rem;" onclick="closeImageModal()">✕</button>
+    <img id="lightboxImage" src="" alt="Gallery Focus" class="lightbox-img" onclick="event.stopPropagation()" />
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-text">Pares<em>alamat</em></span>
+    </a>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" onclick="closeMenu()">Home</a></li>
+      <li><a href="index.html#menu" onclick="closeMenu()">Order</a></li>
+      <li><a href="about.html" class="nav-active" onclick="closeMenu()">About Us</a></li>
+      <li><a href="#gallery" onclick="closeMenu()">Gallery</a></li>
+      <li><a href="reviews.html" onclick="closeMenu()">Reviews</a></li>
+      <li><a href="reviews.html#contact" onclick="closeMenu()">Contact</a></li>
+    </ul>
+    <a href="index.html#menu" class="nav-cart-btn" style="text-decoration: none;">
+      🛒 <span style="background: var(--gold); color: var(--brown-dark); border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 900;">0</span>
+    </a>
+  </nav>
+
+  <!-- ===== PAGE HERO BANNER ===== -->
+  <section class="page-hero" id="about-top">
+    <div class="page-hero-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+    <div class="page-hero-content">
+      <div class="hero-tag">🏆 Est. 2020 · Valenzuela</div>
+      <h1 class="page-hero-title">Our <span>Story</span> &amp;<br/>Our <span>People</span></h1>
+      <p class="hero-sub">From a small corner in Arrhelyn Building to Valenzuela's most beloved pares destination.</p>
+      <div class="hero-cta">
+        <a href="#gallery" class="btn-primary">See Our Gallery</a>
+        <a href="index.html#menu" class="btn-ghost">Order Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT US ===== -->
+  <section class="about-section" id="about">
+    <div class="about-blob"></div>
+    <div class="about-grid">
+      <div class="about-visual">
+        <div class="about-img-wrap">
+          <div class="about-badge">Est. 2020</div>
+          <div class="about-img-placeholder" style="background: transparent; padding: 0;">
+            <img src="Story.png" alt="Paresalamat Story" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-xl);" />
+          </div>
+        </div>
+        <div class="about-mini-cards">
+          <div class="mini-card">
+            <span>🏆</span>
+            <strong>Best Pares</strong>
+            <p>Valenzuela 2020</p>
+          </div>
+          <div class="mini-card">
+            <span>🌿</span>
+            <strong>All Natural</strong>
+            <p>No preservatives</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-content">
+        <div class="section-tag">Our Legacy</div>
+        <h2>More Than Just <span>Pares</span></h2>
+        <p>Paresalamat was born from a simple dream in 2020 — to bring the true soul of traditional Filipino beef pares to the bustling streets of Valenzuela. We set out to create a welcoming place built on honesty, unparalleled quality, and highly affordable prices that absolutely everyone in the community can enjoy, from hardworking students to busy professionals craving a hearty late-night comfort meal.</p>
+        <p>Every single bowl we serve carries decades of rich culinary tradition. We believe that truly great food takes time. That is why our premium beef brisket is meticulously slow-cooked for over 12 hours, simmering gently in an incredibly aromatic broth infused with star anise, roasted garlic, and our closely guarded secret family spice blend. It is served steaming hot with our signature sinangag (fried garlic rice) and that unforgettable sweet-savory glaze that keeps our loyal customers coming back day after day.</p>
+        <p>From our humble, passionate beginnings in a small corner at the Arrhelyn Building on Maysan Road, Paresalamat has rapidly grown into a beloved local landmark for anyone craving authentic, comforting Filipino food. We treat every customer like family, ensuring that every bite feels exactly like home.</p>
+        <div class="about-values">
+          <div class="value-item">
+            <span class="value-icon">🍲</span>
+            <div>
+              <strong>Slow-Cooked Daily</strong>
+              <p>Fresh, massive batches prepared every single morning using only the most premium cuts of meat.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="value-icon">💰</span>
+            <div>
+              <strong>Budget-Friendly</strong>
+              <p>Unbeatable, wallet-friendly value starting at only ₱40, perfectly priced for students and workers alike.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="value-icon">🤝</span>
+            <div>
+              <strong>Community First</strong>
+              <p>Proudly serving the wonderful Valenzuela community with endless passion, dedication, and love.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="faq-section" id="faq">
+    <div class="section-header">
+      <div class="section-tag">Got Questions?</div>
+      <h2>Frequently Asked <span>Questions</span></h2>
+      <p>Everything you need to know about your favorite pares.</p>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item fade-up">
+        <h4>Do you offer delivery services outside of Valenzuela City?</h4>
+        <p>Currently, our direct hot delivery focuses exclusively on Valenzuela City and immediately surrounding areas to ensure your pares arrives piping hot, fresh, and ready to eat. However, bulk orders and specialized catering requests for outer regions can absolutely be arranged with prior notice. Just send us a message!</p>
+      </div>
+      <div class="faq-item fade-up">
+        <h4>What exactly makes your legendary beef pares different from others?</h4>
+        <p>It all comes down to our meticulous slow-cooking process and our highly guarded secret family spice blend. We carefully simmer our premium beef cuts for over 12 hours until they literally melt in your mouth. We absolutely never use cheap shortcuts or artificial thickeners—just pure, hearty, incredibly traditional flavor in every single bite.</p>
+      </div>
+      <div class="faq-item fade-up">
+        <h4>Can I easily order in advance for large gatherings, events, or office parties?</h4>
+        <p>Absolutely! We absolutely love feeding a hungry crowd. For large orders of 10 bowls or more, we highly recommend messaging us at least 24 hours in advance via our official Facebook page or WhatsApp number. We will prepare everything perfectly portioned and securely packed for your special event.</p>
+      </div>
+      <div class="faq-item fade-up">
+        <h4>Are your meat and fresh ingredients sourced locally?</h4>
+        <p>Yes, 100%! We are incredibly proud to support our hard-working local Valenzuela markets and farmers. Our premium beef, farm-fresh vegetables, and aromatic spices are sourced daily from highly trusted local vendors to guarantee maximum freshness, superior quality, and to continuously support the community that built us.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section class="gallery-section" id="gallery">
+    <div class="section-header">
+      <div class="section-tag">Gallery</div>
+      <h2>Our Beloved <span>Customers</span></h2>
+      <p>Real people, real smiles, real pares moments</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item gi-large" onclick="openImageModal('customer3.jpg')">
+        <div class="gallery-placeholder" style="background: transparent; padding: 0;">
+          <img src="customer3.jpg" alt="Group of customers dining" style="width: 100%; height: 100%; object-fit: cover;" />
+        </div>
+        <div class="gallery-label">Squad Goals 🍲</div>
+      </div>
+      <div class="gallery-item" onclick="openImageModal('customer2.jpg')">
+        <div class="gallery-placeholder" style="background: transparent; padding: 0;">
+          <img src="customer2.jpg" alt="Happy customers" style="width: 100%; height: 100%; object-fit: cover;" />
+        </div>
+        <div class="gallery-label">Happy Diners</div>
+      </div>
+      <div class="gallery-item" onclick="openImageModal('customer5.jpg')">
+        <div class="gallery-placeholder" style="background: transparent; padding: 0;">
+          <img src="customer5.jpg" alt="Students enjoying pares" style="width: 100%; height: 100%; object-fit: cover;" />
+        </div>
+        <div class="gallery-label">Student Favorites</div>
+      </div>
+      <div class="gallery-item gi-wide" onclick="openImageModal('customer4.jpg')">
+        <div class="gallery-placeholder" style="background: transparent; padding: 0;">
+          <img src="customer4.jpg" alt="Big group dining" style="width: 100%; height: 100%; object-fit: cover;" />
+        </div>
+        <div class="gallery-label">Big Group Vibes</div>
+      </div>
+      <div class="gallery-item" onclick="openImageModal('customer1.jpg')">
+        <div class="gallery-placeholder" style="background: transparent; padding: 0;">
+          <img src="customer1.jpg" alt="Customers enjoying their meal" style="width: 100%; height: 100%; object-fit: cover;" />
+        </div>
+        <div class="gallery-label">Good Times</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA STRIP ===== -->
+  <section class="cta-strip">
+    <div class="cta-strip-inner">
+      <div>
+        <h3>Ready to taste the legend?</h3>
+        <p>Order now and experience Valenzuela's finest pares.</p>
+      </div>
+      <a href="index.html#menu" class="btn-primary">Order Now 🍜</a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Pares<em>alamat</em></div>
+        <p>Legendary pares. Unbeatable value. Straight from Valenzuela's heart.</p>
+      </div>
+      <div class="footer-links-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#menu">Order Now</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="reviews.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-col">
+        <h4>Contact</h4>
+        <ul>
+          <li>Maysan, Valenzuela City</li>
+          <li><a href="tel:09948243867">0994 824 3867</a></li>
+          <li>6:00 AM – 10:00 PM</li>
+          <li>Open Daily</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Paresalamat. All rights reserved. Made with ❤ in Valenzuela.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

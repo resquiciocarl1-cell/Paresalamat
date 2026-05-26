@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paresalamat – Reviews & Contact</title>
+  <link rel="icon" type="image/jpeg" href="favicon.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-text">Pares<em>alamat</em></span>
+    </a>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" onclick="closeMenu()">Home</a></li>
+      <li><a href="index.html#menu" onclick="closeMenu()">Order</a></li>
+      <li><a href="about.html" onclick="closeMenu()">About Us</a></li>
+      <li><a href="about.html#gallery" onclick="closeMenu()">Gallery</a></li>
+      <li><a href="reviews.html" class="nav-active" onclick="closeMenu()">Reviews</a></li>
+      <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+    </ul>
+    <a href="index.html#menu" class="nav-cart-btn" style="text-decoration: none;">
+      🛒 <span style="background: var(--gold); color: var(--brown-dark); border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 900;">0</span>
+    </a>
+  </nav>
+
+  <!-- ===== PAGE HERO BANNER ===== -->
+  <section class="page-hero" id="reviews-top">
+    <div class="page-hero-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+    <div class="page-hero-content">
+      <div class="hero-tag">⭐ 4.9 Rating · Real Reviews</div>
+      <h1 class="page-hero-title">What People <span>Say</span><br/>About <span>Us</span></h1>
+      <p class="hero-sub">Hundreds of happy customers. One legendary bowl at a time.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary">Get In Touch</a>
+        <a href="index.html#menu" class="btn-ghost">Order Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== REVIEWS / FEEDBACK ===== -->
+  <section class="feedback-section" id="feedback">
+    <div class="section-header">
+      <div class="section-tag">Reviews</div>
+      <h2>What Our <span>Customers</span> Say</h2>
+      <p>Real love from real pares fans</p>
+    </div>
+
+    <div style="position: relative; max-width: 1000px; margin: 0 auto 3rem auto; padding: 0 40px;">
+      <button onclick="scrollReviews(-1)" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #8B0000; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; z-index: 10; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;" onmouseover="this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.transform='translateY(-50%) scale(1)'">‹</button>
+
+      <div id="reviewsGrid" style="display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; padding: 1rem 0; scrollbar-width: none; -ms-overflow-style: none; scroll-snap-type: x mandatory;">
+        <style>#reviewsGrid::-webkit-scrollbar { display: none; }</style>
+      </div>
+
+      <button onclick="scrollReviews(1)" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: #8B0000; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; z-index: 10; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;" onmouseover="this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.transform='translateY(-50%) scale(1)'">›</button>
+    </div>
+
+    <!-- Leave a Review Form -->
+    <div class="leave-review">
+      <h3>Leave a Review 📝</h3>
+      <p>Enjoyed your meal? We'd love to hear from you!</p>
+      <div class="review-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" id="reviewerName" placeholder="Juan dela Cruz" />
+          </div>
+          <div class="form-group">
+            <label>Rating</label>
+            <div class="star-rating" id="starRating">
+              <span data-val="1">★</span>
+              <span data-val="2">★</span>
+              <span data-val="3">★</span>
+              <span data-val="4">★</span>
+              <span data-val="5">★</span>
+            </div>
+            <input type="hidden" id="ratingVal" value="0" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Your Review</label>
+          <textarea id="reviewText" placeholder="Tell us about your experience…" rows="4"></textarea>
+        </div>
+        <button class="btn-primary" onclick="submitReview()">Submit Review</button>
+        <div class="review-success" id="reviewSuccess" style="display:none;">✅ Thank you for your review!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="contact-section" id="contact">
+    <div class="section-header">
+      <div class="section-tag">Get In Touch</div>
+      <h2>Contact <span>Us</span></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-card">
+          <span class="contact-icon">📍</span>
+          <div>
+            <strong>Location</strong>
+            <p>Paresalamat, Arrhelyn Building<br/>Maysan Road cor Oreta St.<br/>Maysan, Valenzuela City</p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <span class="contact-icon">📞</span>
+          <div>
+            <strong>Phone / WhatsApp</strong>
+            <p><a href="tel:09948243867">0994 824 3867</a></p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <span class="contact-icon">🕐</span>
+          <div>
+            <strong>Operating Hours</strong>
+            <p>Daily: 6:00 AM – 10:00 PM</p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <span class="contact-icon">📱</span>
+          <div>
+            <strong>Social Media</strong>
+            <p>
+              <a href="https://www.facebook.com/share/18bCZEDxGX/" target="_blank" class="social-link">Facebook</a> ·
+              <a href="https://www.instagram.com/paresalamat.biz?igsh=MThtdmNodjl0cHR1bw==" target="_blank" class="social-link">Instagram</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="message-form">
+          <h3>Send a Message</h3>
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="msgName" placeholder="Your name" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="msgEmail" placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="msgBody" rows="4" placeholder="Questions, catering inquiries, feedback…"></textarea>
+          </div>
+          <button class="btn-primary" onclick="sendMessage()">Send Message</button>
+          <div class="msg-success" id="msgSuccess" style="display:none;">✅ Message sent! We'll get back to you soon.</div>
+        </div>
+      </div>
+
+      <div class="map-container">
+        <div class="map-placeholder">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3858.1!2d120.9668!3d14.6807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTTCsDQwJzUwLjUiTiAxMjDCsDU4JzAwLjUiRQ!5e0!3m2!1sen!2sph!4v1700000000000!5m2!1sen!2sph"
+            width="100%"
+            height="400"
+            style="border:0; border-radius: 16px;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Paresalamat Location Map">
+          </iframe>
+        </div>
+        <div class="map-pin-card">
+          <strong>📍 Paresalamat</strong>
+          <p>Arrhelyn Building, Maysan, Valenzuela City</p>
+          <a href="https://maps.google.com/?q=Maysan+Valenzuela+City" target="_blank" class="btn-ghost" style="margin-top:0.75rem; display:inline-block;">Open in Maps ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA STRIP ===== -->
+  <section class="cta-strip">
+    <div class="cta-strip-inner">
+      <div>
+        <h3>Convinced? Come taste for yourself!</h3>
+        <p>Order online or visit us at Maysan, Valenzuela City.</p>
+      </div>
+      <a href="index.html#menu" class="btn-primary">Order Now 🍜</a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Pares<em>alamat</em></div>
+        <p>Legendary pares. Unbeatable value. Straight from Valenzuela's heart.</p>
+      </div>
+      <div class="footer-links-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#menu">Order Now</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#gallery">Gallery</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-col">
+        <h4>Contact</h4>
+        <ul>
+          <li>Maysan, Valenzuela City</li>
+          <li><a href="tel:09948243867">0994 824 3867</a></li>
+          <li>6:00 AM – 10:00 PM</li>
+          <li>Open Daily</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Paresalamat. All rights reserved. Made with ❤ in Valenzuela.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
